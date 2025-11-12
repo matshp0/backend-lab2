@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import { UserEntity } from '../entities/user.entity';
 
 export class UserRepository {
@@ -15,10 +14,9 @@ export class UserRepository {
     return this.storage.delete(id);
   }
 
-  createUser(user: CreateUserDto): UserEntity {
-    const id = randomUUID();
-    const newUser = { id, ...user };
-    this.storage.set(id, newUser);
+  createUser(user: UserEntity): UserEntity {
+    const newUser = { ...user };
+    this.storage.set(user.id, newUser);
     return newUser;
   }
 
