@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UserEntity } from 'src/data/entities/user.entity';
+import { randomUUID } from 'crypto';
 import { UserRepository } from 'src/data/repositories/users.repository';
 import { CreateUserDto } from './dto/createUser.dto';
-import { randomUUID } from 'crypto';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {

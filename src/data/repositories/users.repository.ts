@@ -1,4 +1,4 @@
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '../../users/entities/user.entity';
 
 export class UserRepository {
   private readonly storage: Map<string, UserEntity>;
