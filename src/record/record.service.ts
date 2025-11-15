@@ -18,7 +18,7 @@ export class RecordService {
     const newRecord: RecordEntity = {
       id,
       ...createRecordDto,
-      created_at: new Date(),
+      createdAt: new Date(),
     };
     return this.recordRepository.createRecord(newRecord);
   }

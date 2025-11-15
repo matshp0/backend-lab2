@@ -3,11 +3,11 @@ import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 export class CreateRecordDto {
   @IsString()
   @IsNotEmpty()
-  user_id: string;
+  userId: string;
 
   @IsString()
   @IsNotEmpty()
-  category_id: string;
+  categoryId: string;
 
   @IsNumber()
   @IsNotEmpty()
