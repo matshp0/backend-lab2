@@ -2,7 +2,7 @@
 
 ## About the Project
 
-This is a NestJS project that provides a simple API for managing users, categories, and records. It is built with a modular architecture, with separate modules for each of the main features.
+This is a NestJS project that provides a simple API for managing users, categories, and records. It is built with a modular architecture, with separate modules for each of the main features. [Live demo](https://backend-lab2-ykv3.onrender.com)
 
 ## Getting Started
 
