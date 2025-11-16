@@ -1,0 +1,12 @@
+services:
+  api:
+    container_name: nest-api-2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    ports:
+      - "3000:3000"
