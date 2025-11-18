@@ -7,7 +7,7 @@ import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
 export class CategoryRepository {
   constructor(private readonly pgService: PgService) {}
 
-  async getCategoryById(id: string): Promise<CategoryEntity | null> {
+  async getCategoryById(id: string) {
     const category = await this.pgService.kysley
       .selectFrom('category')
       .selectAll()

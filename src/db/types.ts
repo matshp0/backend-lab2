@@ -25,7 +25,7 @@ export type record = {
 export type user = {
     id: Generated<string>;
     name: string;
-    defaultCurrencyCode: string | null;
+    defaultCurrencyCode: string;
 };
 export type DB = {
     category: category;

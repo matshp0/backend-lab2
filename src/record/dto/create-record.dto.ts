@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsDecimal, IsUUID } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsDecimal,
+  IsUUID,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateRecordDto {
   @IsString()
@@ -15,4 +21,8 @@ export class CreateRecordDto {
   @IsNotEmpty()
   @IsDecimal()
   cost: string;
+
+  @IsString()
+  @IsOptional()
+  currencyCode?: string;
 }

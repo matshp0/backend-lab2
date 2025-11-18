@@ -31,11 +31,11 @@ model category {
 }
 
 model user {
-  id                  String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                  String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name                String
-  defaultCurrencyCode String?   @db.Char(3)
-  records             record[]  @relation("userRecords")
-  defaultCurrency     currency? @relation("userDefaultCurrency", fields: [defaultCurrencyCode], references: [code])
+  defaultCurrencyCode String   @db.Char(3)
+  records             record[] @relation("userRecords")
+  defaultCurrency     currency @relation("userDefaultCurrency", fields: [defaultCurrencyCode], references: [code])
 }
 
 model record {

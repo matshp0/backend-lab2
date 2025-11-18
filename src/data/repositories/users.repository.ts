@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { UserEntity } from '../../users/entities/user.entity';
 import { PgService } from '../pg.service';
-import { CreateUserDto } from 'src/users/dto/createUser.dto';
+import { Insertable } from 'kysely';
+import { user } from 'src/db/types';
 
 @Injectable()
 export class UserRepository {
   constructor(private readonly pgService: PgService) {}
 
-  async getUserById(id: string): Promise<UserEntity | null> {
+  async getUserById(id: string) {
     const user = await this.pgService.kysley
       .selectFrom('user')
       .selectAll()
@@ -24,7 +24,7 @@ export class UserRepository {
     return !!deleted.numDeletedRows;
   }
 
-  async createUser(user: CreateUserDto) {
+  async createUser(user: Insertable<user>) {
     return await this.pgService.kysley
       .insertInto('user')
       .values(user)

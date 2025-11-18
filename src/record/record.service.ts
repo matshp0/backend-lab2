@@ -9,6 +9,7 @@ import { RecordRepository } from 'src/data/repositories/record.repository';
 import { GetAllRecordsFilter } from './dto/get-all-records-filter.dto';
 import { UserRepository } from 'src/data/repositories/users.repository';
 import { CategoryRepository } from 'src/data/repositories/category.repository';
+import { CurrencyRepository } from 'src/data/repositories/currency.repository';
 
 @Injectable()
 export class RecordService {
@@ -16,21 +17,38 @@ export class RecordService {
     private readonly recordRepository: RecordRepository,
     private readonly userRepository: UserRepository,
     private readonly categoryRepository: CategoryRepository,
+    private readonly currencyRepository: CurrencyRepository,
   ) {}
 
   async create(dto: CreateRecordDto) {
-    const { userId, categoryId } = dto;
-    const [existingUser, exisitingCategory] = await Promise.all([
+    const { userId, categoryId, currencyCode } = dto;
+    const [user, category] = await Promise.all([
       this.userRepository.getUserById(userId),
       this.categoryRepository.getCategoryById(categoryId),
     ]);
-    if (!existingUser)
+    if (!user)
       throw new BadRequestException(`User with ${userId} id does not exist`);
-    if (!exisitingCategory)
+    if (!category)
       throw new BadRequestException(
         `Category with ${categoryId} id does not exist`,
       );
-    return this.recordRepository.createRecord(dto);
+    if (currencyCode) {
+      const currency =
+        await this.currencyRepository.getCurrencyByCode(currencyCode);
+      if (!currency)
+        throw new BadRequestException(
+          `Currency with code ${currencyCode} does not exist`,
+        );
+    }
+    const finalCurrencyCode = currencyCode ?? user.defaultCurrencyCode;
+    if (!finalCurrencyCode)
+      throw new BadRequestException(
+        'No currency specified and user has no default currency',
+      );
+    return this.recordRepository.createRecord({
+      ...dto,
+      currencyCode: finalCurrencyCode,
+    });
   }
 
   async findOne(id: string): Promise<RecordEntity> {

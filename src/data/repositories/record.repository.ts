@@ -2,7 +2,8 @@ import { GetAllRecordsFilter } from 'src/record/dto/get-all-records-filter.dto';
 import { RecordEntity } from '../../record/entities/record.entity';
 import { Injectable } from '@nestjs/common';
 import { PgService } from '../pg.service';
-import { CreateRecordDto } from 'src/record/dto/create-record.dto';
+import { record } from 'src/db/types';
+import { Insertable } from 'kysely';
 
 @Injectable()
 export class RecordRepository {
@@ -25,7 +26,7 @@ export class RecordRepository {
     return !!deleted.numDeletedRows;
   }
 
-  async createRecord(record: CreateRecordDto) {
+  async createRecord(record: Insertable<record>) {
     return await this.pgService.kysley
       .insertInto('record')
       .values(record)
