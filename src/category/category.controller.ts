@@ -8,17 +8,17 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto): CategoryEntity {
+  create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoryService.create(createCategoryDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): CategoryEntity {
+  findOne(@Param('id') id: string): Promise<CategoryEntity> {
     return this.categoryService.findOne(id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): void {
-    this.categoryService.remove(id);
+  async remove(@Param('id') id: string): Promise<void> {
+    await this.categoryService.remove(id);
   }
 }

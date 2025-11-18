@@ -19,23 +19,23 @@ export class RecordController {
   constructor(private readonly recordService: RecordService) {}
 
   @Post()
-  create(@Body() createRecordDto: CreateRecordDto): RecordEntity {
+  create(@Body() createRecordDto: CreateRecordDto): Promise<RecordEntity> {
     return this.recordService.create(createRecordDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): RecordEntity {
+  findOne(@Param('id') id: string): Promise<RecordEntity> {
     return this.recordService.findOne(id);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  remove(@Param('id') id: string): void {
-    this.recordService.remove(id);
+  async remove(@Param('id') id: string): Promise<void> {
+    await this.recordService.remove(id);
   }
 
   @Get()
-  getAll(@Query() filters: GetAllRecordsFilter): RecordEntity[] {
+  getAll(@Query() filters: GetAllRecordsFilter) {
     return this.recordService.findAll(filters);
   }
 }

@@ -3,5 +3,5 @@ export class RecordEntity {
   userId: string;
   categoryId: string;
   createdAt: Date;
-  cost: number;
+  cost: string;
 }

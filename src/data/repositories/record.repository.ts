@@ -1,32 +1,46 @@
 import { GetAllRecordsFilter } from 'src/record/dto/get-all-records-filter.dto';
 import { RecordEntity } from '../../record/entities/record.entity';
+import { Injectable } from '@nestjs/common';
+import { PgService } from '../pg.service';
+import { CreateRecordDto } from 'src/record/dto/create-record.dto';
 
+@Injectable()
 export class RecordRepository {
-  private readonly storage: Map<string, RecordEntity>;
-  constructor() {
-    this.storage = new Map();
+  constructor(private readonly pgService: PgService) {}
+
+  async getRecordById(id: string): Promise<RecordEntity | null> {
+    const record = await this.pgService.kysley
+      .selectFrom('record')
+      .selectAll()
+      .where('id', '=', id)
+      .executeTakeFirst();
+    return record ?? null;
   }
 
-  getRecordById(id: string): RecordEntity | null {
-    return this.storage.get(id) || null;
+  async deleteRecordById(id: string): Promise<boolean> {
+    const deleted = await this.pgService.kysley
+      .deleteFrom('record')
+      .where('id', '=', id)
+      .executeTakeFirstOrThrow();
+    return !!deleted.numDeletedRows;
   }
 
-  deleteRecordById(id: string): boolean {
-    return this.storage.delete(id);
+  async createRecord(record: CreateRecordDto) {
+    return await this.pgService.kysley
+      .insertInto('record')
+      .values(record)
+      .returningAll()
+      .executeTakeFirstOrThrow();
   }
 
-  createRecord(record: RecordEntity): RecordEntity {
-    const newRecord = { ...record };
-    this.storage.set(record.id, newRecord);
-    return newRecord;
-  }
-
-  getAll(filter: GetAllRecordsFilter): RecordEntity[] {
-    return Array.from(this.storage.values()).filter((entity) =>
-      Object.entries(filter).every(
-        ([key, value]) =>
-          value === undefined || entity[key as keyof RecordEntity] === value,
-      ),
-    );
+  async getAll(filter: GetAllRecordsFilter): Promise<RecordEntity[]> {
+    const query = this.pgService.kysley.selectFrom('record').selectAll();
+    if (filter.categoryId !== undefined) {
+      query.where('categoryId', '=', filter.categoryId);
+    }
+    if (filter.userId !== undefined) {
+      query.where('userId', '=', filter.userId);
+    }
+    return await query.execute();
   }
 }

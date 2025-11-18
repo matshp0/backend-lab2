@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { randomUUID } from 'crypto';
 import { UserRepository } from 'src/data/repositories/users.repository';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UserEntity } from './entities/user.entity';
@@ -8,23 +7,22 @@ import { UserEntity } from './entities/user.entity';
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  public findUsers(id: string): UserEntity {
-    const user = this.userRepository.getUserById(id);
+  public async findUsers(id: string) {
+    const user = await this.userRepository.getUserById(id);
     if (!user) throw new NotFoundException(`User with id ${id} not found`);
     return user;
   }
 
-  public removeUser(id: string): void {
-    const deleted = this.userRepository.deleteUserById(id);
+  public async removeUser(id: string): Promise<void> {
+    const deleted = await this.userRepository.deleteUserById(id);
     if (!deleted) throw new NotFoundException(`User with id ${id} not found`);
   }
 
   public createUser(dto: CreateUserDto) {
-    const id = randomUUID();
-    return this.userRepository.createUser({ id, ...dto });
+    return this.userRepository.createUser(dto);
   }
 
-  public findAllUsers(): UserEntity[] {
+  public findAllUsers(): Promise<UserEntity[]> {
     return this.userRepository.getAll();
   }
 }

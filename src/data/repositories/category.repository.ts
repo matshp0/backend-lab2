@@ -1,26 +1,41 @@
+import { Injectable } from '@nestjs/common';
 import { CategoryEntity } from '../../category/entities/category.entity';
+import { PgService } from '../pg.service';
+import { CreateCategoryDto } from 'src/category/dto/create-category.dto';
 
+@Injectable()
 export class CategoryRepository {
-  private readonly storage: Map<string, CategoryEntity>;
-  constructor() {
-    this.storage = new Map();
+  constructor(private readonly pgService: PgService) {}
+
+  async getCategoryById(id: string): Promise<CategoryEntity | null> {
+    const category = await this.pgService.kysley
+      .selectFrom('category')
+      .selectAll()
+      .where('id', '=', id)
+      .executeTakeFirst();
+    return category ?? null;
   }
 
-  getCategoryById(id: string): CategoryEntity | null {
-    return this.storage.get(id) || null;
+  async deleteCategoryById(id: string): Promise<boolean> {
+    const deleted = await this.pgService.kysley
+      .deleteFrom('category')
+      .where('id', '=', id)
+      .executeTakeFirst();
+    return !!deleted.numDeletedRows;
   }
 
-  deleteCategoryById(id: string): boolean {
-    return this.storage.delete(id);
+  async createCategory(category: CreateCategoryDto) {
+    return await this.pgService.kysley
+      .insertInto('category')
+      .values(category)
+      .returningAll()
+      .executeTakeFirst();
   }
 
-  createCategory(category: CategoryEntity): CategoryEntity {
-    const newCategory = { ...category };
-    this.storage.set(category.id, newCategory);
-    return newCategory;
-  }
-
-  getAll(): CategoryEntity[] {
-    return Array.from(this.storage.values());
+  async getAll(): Promise<CategoryEntity[]> {
+    return await this.pgService.kysley
+      .selectFrom('category')
+      .selectAll()
+      .execute();
   }
 }

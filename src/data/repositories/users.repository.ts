@@ -1,26 +1,38 @@
+import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../../users/entities/user.entity';
+import { PgService } from '../pg.service';
+import { CreateUserDto } from 'src/users/dto/createUser.dto';
 
+@Injectable()
 export class UserRepository {
-  private readonly storage: Map<string, UserEntity>;
-  constructor() {
-    this.storage = new Map();
+  constructor(private readonly pgService: PgService) {}
+
+  async getUserById(id: string): Promise<UserEntity | null> {
+    const user = await this.pgService.kysley
+      .selectFrom('user')
+      .selectAll()
+      .where('id', '=', id)
+      .executeTakeFirst();
+    return user || null;
   }
 
-  getUserById(id: string): UserEntity | null {
-    return this.storage.get(id) || null;
+  async deleteUserById(id: string): Promise<boolean> {
+    const deleted = await this.pgService.kysley
+      .deleteFrom('user')
+      .where('id', '=', id)
+      .executeTakeFirst();
+    return !!deleted.numDeletedRows;
   }
 
-  deleteUserById(id: string): boolean {
-    return this.storage.delete(id);
+  async createUser(user: CreateUserDto) {
+    return await this.pgService.kysley
+      .insertInto('user')
+      .values(user)
+      .returningAll()
+      .executeTakeFirstOrThrow();
   }
 
-  createUser(user: UserEntity): UserEntity {
-    const newUser = { ...user };
-    this.storage.set(user.id, newUser);
-    return newUser;
-  }
-
-  getAll(): UserEntity[] {
-    return Array.from(this.storage.values());
+  async getAll() {
+    return await this.pgService.kysley.selectFrom('user').selectAll().execute();
   }
 }
