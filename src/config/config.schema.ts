@@ -7,9 +7,5 @@ export default Joi.object({
 
   PORT: Joi.number().port().default(3000),
 
-  DB_HOST: Joi.string().default('localhost'),
-  DB_PORT: Joi.number().default(5432),
-  DB_USER: Joi.string().default('user'),
-  DB_PASS: Joi.string().default('password'),
-  DB_NAME: Joi.string().default('mydb'),
+  DATABASE_URL: Joi.string().default('localhost'),
 });
