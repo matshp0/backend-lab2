@@ -5,6 +5,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import fastifyCookie from '@fastify/cookie';
 
 export async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -21,6 +22,10 @@ export async function bootstrap() {
       transform: true,
     }),
   );
+  app.register(fastifyCookie, {
+    secret: 'my-super-secret-key-for-signed-cookies',
+  });
+
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
 }
 

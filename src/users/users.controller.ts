@@ -1,16 +1,13 @@
 import {
-  Body,
   Controller,
   Delete,
   Get,
   HttpCode,
   HttpStatus,
   Param,
-  Post,
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/createUser.dto';
 
 @Controller('users')
 export class UsersController {
@@ -24,11 +21,6 @@ export class UsersController {
   @Get('/')
   getAllUsers() {
     return this.usersService.findAllUsers();
-  }
-
-  @Post('/')
-  createUser(@Body() dto: CreateUserDto) {
-    return this.usersService.createUser(dto);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)

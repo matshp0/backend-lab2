@@ -13,7 +13,7 @@ export class UserRepository {
       .selectAll()
       .where('id', '=', id)
       .executeTakeFirst();
-    return user || null;
+    return user ?? null;
   }
 
   async deleteUserById(id: string): Promise<boolean> {
@@ -30,6 +30,15 @@ export class UserRepository {
       .values(user)
       .returningAll()
       .executeTakeFirstOrThrow();
+  }
+
+  async getUserByEmail(email: string) {
+    const user = await this.pgService.kysley
+      .selectFrom('user')
+      .selectAll()
+      .where('email', '=', email)
+      .executeTakeFirst();
+    return user ?? null;
   }
 
   async getAll() {

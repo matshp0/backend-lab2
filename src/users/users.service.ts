@@ -1,8 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from 'src/data/repositories/users.repository';
-import { CreateUserDto } from './dto/createUser.dto';
 import { UserEntity } from './entities/user.entity';
-import { DEFAULT_CURRENCY } from 'src/constants/default-currency';
 
 @Injectable()
 export class UsersService {
@@ -17,13 +15,6 @@ export class UsersService {
   public async removeUser(id: string): Promise<void> {
     const deleted = await this.userRepository.deleteUserById(id);
     if (!deleted) throw new NotFoundException(`User with id ${id} not found`);
-  }
-
-  public createUser(dto: CreateUserDto) {
-    return this.userRepository.createUser({
-      defaultCurrencyCode: DEFAULT_CURRENCY,
-      ...dto,
-    });
   }
 
   public findAllUsers(): Promise<UserEntity[]> {

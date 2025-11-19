@@ -6,6 +6,7 @@ import { RecordModule } from './record/record.module';
 import configSchema from './config/config.schema';
 import config from './config/config';
 import { DataModule } from './data/data.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { DataModule } from './data/data.module';
     UsersModule,
     CategoryModule,
     RecordModule,
+    AuthModule,
   ],
   providers: [DataModule],
 })
