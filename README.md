@@ -1,8 +1,16 @@
-# Backend Lab 2
+# Backend Lab 3
+
+## Variant
+
+Group - IM-34
+
+34 % 3 = 1
+
+Task - add currency entity. Make every use have a default currency and use it to create records.
 
 ## About the Project
 
-This is a NestJS project that provides a simple API for managing users, categories, and records. It is built with a modular architecture, with separate modules for each of the main features. [Live demo](https://backend-lab2-ykv3.onrender.com)
+This is a NestJS project that provides a simple API for managing users, categories, records, and currencies. It uses a PostgreSQL database with Prisma ORM for data storage and is built with a modular architecture, with separate modules for each of the main features. [Live demo](https://backend-lab2-ykv3.onrender.com)
 
 ## Getting Started
 
@@ -24,6 +32,13 @@ To get a local copy up and running follow these simple steps.
 2. Install NPM packages
    ```sh
    npm install
+   ```
+3. Setup Database
+   ```sh
+   # Make sure your docker is running
+   docker compose up -d
+   npm run prisma:migrate:deploy
+   npm run prisma:seed
    ```
 
 ## Usage
@@ -69,3 +84,5 @@ The application will be running on `http://localhost:3000`.
 - [NestJS](https://nestjs.com/)
 - [Fastify](https://www.fastify.io/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [Prisma](https://www.prisma.io/)
+- [PostgreSQL](https://www.postgresql.org/)
