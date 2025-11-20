@@ -23,7 +23,7 @@ export async function bootstrap() {
     }),
   );
   app.register(fastifyCookie, {
-    secret: 'my-super-secret-key-for-signed-cookies',
+    secret: process.env.COOKIE_SECRET,
   });
 
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
