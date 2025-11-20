@@ -53,13 +53,20 @@ The application will be running on `http://localhost:3000`.
 
 ## API Endpoints
 
+### Auth
+
+| Method | Endpoint         | Description          |
+| ------ | ---------------- | -------------------- |
+| `POST` | `/auth/register` | Register a new user  |
+| `POST` | `/auth/login`    | Login a user         |
+| `GET`  | `/auth/refresh`  | Refresh access token |
+
 ### Users
 
 | Method   | Endpoint         | Description         |
 | -------- | ---------------- | ------------------- |
 | `GET`    | `/users`         | Get all users       |
 | `GET`    | `/users/:userId` | Get a user by ID    |
-| `POST`   | `/users`         | Create a new user   |
 | `DELETE` | `/users/:userId` | Delete a user by ID |
 
 ### Categories
